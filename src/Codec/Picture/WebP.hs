@@ -10,11 +10,9 @@ module Codec.Picture.WebP ( decodeRgb8
 
 import           Codec.Picture            (Image (Image), PixelBaseComponent,
                                            PixelRGB8, PixelRGBA8)
-import           Control.Applicative      (pure, (<*>))
 import qualified Data.ByteString          as BS
 import qualified Data.ByteString.Internal as BS
 import qualified Data.ByteString.Unsafe   as BS
-import           Data.Functor             ((<$>))
 import           Data.Vector.Storable     (Vector, unsafeFromForeignPtr0,
                                            unsafeWith)
 import           Data.Word                (Word8)
@@ -52,7 +50,7 @@ encodeJuicyPixels :: (PixelBaseComponent p ~ Word8)
                   -> Image p
                   -> CFloat
                   -> BS.ByteString
-encodeJuicyPixels encoder pxFactor img = encodeAbsBS encoder h w bytes pxFactor -- JuicyPixels and libwebp define weidth/height in opposite way?
+encodeJuicyPixels encoder pxFactor img = encodeAbsBS encoder w h bytes pxFactor
     where (Image w h bytes) = img
 
 encodeJuicyPixelsLossless :: (PixelBaseComponent p ~ Word8)
@@ -60,7 +58,7 @@ encodeJuicyPixelsLossless :: (PixelBaseComponent p ~ Word8)
                           -> Int
                           -> Image p
                           -> BS.ByteString
-encodeJuicyPixelsLossless encoder pxFactor img = encodeAbsBSLossless encoder h w bytes pxFactor -- JuicyPixels and libwebp define weidth/height in opposite way?
+encodeJuicyPixelsLossless encoder pxFactor img = encodeAbsBSLossless encoder w h bytes pxFactor
     where (Image w h bytes) = img
 
 decodeJuicyPixels :: (PixelBaseComponent p ~ Word8)
@@ -82,7 +80,7 @@ decodeAbsBS :: (Ptr CChar -> CSize -> IO (Ptr UInt8, CInt, CInt))
             -> BS.ByteString
             -> (CInt, CInt, BS.ByteString)
 decodeAbsBS decoder pxFactor bs = unsafePerformIO $ BS.unsafeUseAsCStringLen bs $ \(p, l) -> do
-    (res, h, w) <- decoder p (fromIntegral l)
+    (res, w, h) <- decoder p (fromIntegral l)
     let sz = pxFactor * w * h -- bytes
     img <- BS.PS <$> newForeignPtr webPFree (castPtr res) <*> pure 0 <*> pure (fromIntegral sz)
     pure (w, h, img)
