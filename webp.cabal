@@ -1,14 +1,14 @@
 cabal-version:      1.18
 name:               webp
-version:            0.1.0.1
+version:            0.1.0.2
 license:            GPL-3
 license-file:       LICENSE
 copyright:          Copyright: (c) 2020 Vanessa McHale
 maintainer:         Vanessa McHale <vamchale@gmail.com>
-author:             Vanessa McHale
-synopsis:           JuicyPixels support for WebP format
+author:             Vanessa McHale, Pablo Bollansée <pablo@pabloproductions.be>
+synopsis:           WebP codec for JuicyPixels
 description:
-    Haskell library for webp format, via [c2hs](http://hackage.haskell.org/package/c2hs) and [libwebp](https://developers.google.com/speed/webp/docs/api).
+    [WebP](https://en.wikipedia.org/wiki/WebP) codec for [JuicyPixels](https://github.com/Twinside/Juicy.Pixels), via [c2hs](http://hackage.haskell.org/package/c2hs) and [libwebp](https://developers.google.com/speed/webp/docs/api).
 
 category:           Codec, Image, Compression
 build-type:         Simple
